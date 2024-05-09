@@ -1,0 +1,21 @@
+.navlink {
+  color: black;
+
+  font-size: 1rem;
+  font-weight: 500;
+
+  text-decoration: none;
+}
+
+.specialNavlink {
+  padding: 0.85rem 1rem;
+
+  background-color: transparent;
+
+  border: solid 1px black;
+}
+
+.specialNavlink:hover {
+  color: white;
+  background-color: black;
+}
