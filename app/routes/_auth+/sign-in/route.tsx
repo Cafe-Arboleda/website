@@ -1,7 +1,10 @@
+import { Form } from "@remix-run/react";
+import { SignFormWrapper } from "~/components/sign-form-wrapper";
+
 export default function SignInRoute() {
   return (
-    <div>
-      <h1>Sign In</h1>
-    </div>
+    <SignFormWrapper title="Hola de nuevo!">
+      <Form>form</Form>
+    </SignFormWrapper>
   );
 }
