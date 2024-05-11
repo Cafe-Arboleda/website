@@ -10,7 +10,7 @@
 .heading {
   width: 100%;
 
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .heading h1 {
@@ -31,4 +31,8 @@
   color: gray;
 
   text-decoration: none;
+}
+
+.alternateSignLink:hover {
+  text-decoration: underline;
 }

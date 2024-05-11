@@ -1,0 +1,44 @@
+.baseButton {
+  padding: 0.85rem 1rem;
+
+  font-size: 1rem;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  outline: none;
+
+  border: solid 2px transparent;
+
+  transition: all 0.2s ease-in-out;
+}
+
+.primaryButton {
+  color: white;
+  background-color: black;
+}
+
+.primaryButton:hover {
+  background-color: #222;
+}
+
+.secondaryButton {
+  color: black;
+  border-color: gray;
+  background-color: transparent;
+}
+
+.secondaryButton:hover {
+  color: white;
+  background-color: black;
+  border-color: black;
+}
+
+.ghostButton {
+  color: black;
+  background-color: transparent;
+}
+
+.ghostButton:hover {
+  text-decoration: underline;
+}

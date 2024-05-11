@@ -1,0 +1,56 @@
+.container {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 1rem auto;
+
+  gap: 1rem;
+}
+
+.input {
+  width: 1.25rem;
+  height: 1.25rem;
+
+  margin: 0;
+
+  display: grid;
+  place-content: center;
+
+  background-color: transparent;
+
+  font: inherit;
+  color: currentColor;
+
+  border: solid 2px currentColor;
+
+  cursor: pointer;
+
+  appearance: none;
+}
+
+.input::before {
+  content: "";
+
+  width: 0.5rem;
+  height: 0.5rem;
+
+  transform: scale(0);
+
+  box-shadow: inset 1em 1em black;
+
+  transition: transform 120ms ease-in-out;
+}
+
+.input:checked::before {
+  transform: scale(1);
+}
+
+.label {
+  font-size: 0.85rem;
+
+  line-height: 1.6;
+}
+
+.label a {
+  color: currentColor;
+}
