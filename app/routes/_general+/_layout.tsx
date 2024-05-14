@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { Outlet, useLoaderData, Form } from "@remix-run/react";
 import { json } from "@remix-run/node";
 
 import type { LoaderFunction } from "@remix-run/node";
@@ -11,6 +11,7 @@ import { createSupabaseServerClient } from "~/lib/supabase/client.server";
 import { Navlink } from "~/components/navlink";
 
 import styles from "./layout.module.css";
+import { Button } from "~/components/button";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const { supabase, headers } = createSupabaseServerClient({ request });
@@ -44,7 +45,15 @@ export default function GeneralLayout() {
         </div>
 
         {user ? (
-          <Navlink to={ROUTE.ACCOUNT}>Mi Cuenta</Navlink>
+          <div className={styles.authLinks}>
+            <Navlink to={ROUTE.ACCOUNT}>Mi Cuenta</Navlink>
+
+            <Form action="/sign-out" method="post">
+              <Button type="submit" variant="secondary">
+                Cerrar Sesión
+              </Button>
+            </Form>
+          </div>
         ) : (
           <div className={styles.authLinks}>
             <Navlink to={ROUTE.SIGN_IN}>Ingresar</Navlink>
