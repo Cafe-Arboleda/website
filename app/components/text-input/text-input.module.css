@@ -25,3 +25,10 @@
 
   border: solid 1px lightgray;
 }
+
+.error_message {
+  color: red;
+
+  font-size: 0.75rem;
+  font-style: italic;
+}
