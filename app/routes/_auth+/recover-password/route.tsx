@@ -1,10 +1,16 @@
 import { Form } from "@remix-run/react";
 
+import type { LoaderFunction } from "@remix-run/node";
+
+import { atuhLoader } from "~/utils/auth-loader.server";
+
 import { Button } from "~/components/button";
 import { TextInput } from "~/components/text-input";
 import { SignFormWrapper } from "~/components/sign-form-wrapper";
 
 import styles from "./route.module.css";
+
+export const loader: LoaderFunction = (loaderArgs) => atuhLoader({ loaderArgs });
 
 export default function RecoverPassswordRoute() {
   return (

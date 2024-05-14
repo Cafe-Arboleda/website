@@ -1,12 +1,17 @@
 import { Form, Link } from "@remix-run/react";
 
+import type { LoaderFunction } from "@remix-run/node";
+
+import { ROUTE } from "~/utils/enum";
+import { atuhLoader } from "~/utils/auth-loader.server";
+
 import { Button } from "~/components/button";
 import { TextInput } from "~/components/text-input";
 import { SignFormWrapper } from "~/components/sign-form-wrapper";
 
-import { ROUTE } from "~/utils/enum";
-
 import styles from "./route.module.css";
+
+export const loader: LoaderFunction = (loaderArgs) => atuhLoader({ loaderArgs });
 
 export default function SignInRoute() {
   return (

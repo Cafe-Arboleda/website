@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { Form, Link, json, useActionData } from "@remix-run/react";
+import { Form, Link, json, redirect, useActionData } from "@remix-run/react";
 
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 
 import { ROUTE } from "~/utils/enum";
-
 import { atuhLoader } from "~/utils/auth-loader.server";
-import { getSupabaseWithHeaders } from "~/lib/supabase/supabase-server.server";
+
+import { createSupabaseServerClient } from "~/lib/supabase/client.server";
 
 import { Button } from "~/components/button";
 import { TextInput } from "~/components/text-input";
@@ -18,7 +18,7 @@ import styles from "./route.module.css";
 export const loader: LoaderFunction = (loaderArgs) => atuhLoader({ loaderArgs });
 
 export const action: ActionFunction = async ({ request }) => {
-  const { supabase, headers } = getSupabaseWithHeaders({ request });
+  const { supabase, headers } = createSupabaseServerClient({ request });
 
   const formData = Object.fromEntries(await request.formData());
 
@@ -35,19 +35,22 @@ export const action: ActionFunction = async ({ request }) => {
   const checkResult = userSchema.safeParse(formData);
 
   if (!checkResult.success) {
-    return { user: null, errors: checkResult.error.format() };
+    return json({ user: null, errors: checkResult.error.format() }, { headers });
   }
 
-  const { data, error } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email: checkResult.data.email,
     password: checkResult.data.password,
   });
 
   if (error) {
-    return { user: null, errors: { server: error.message } };
+    return json(
+      { success: false, user: null, errors: { server: error.message } },
+      { headers }
+    );
   }
 
-  return json({ user: data.user }, { headers });
+  return redirect(ROUTE.HOME, { headers });
 };
 
 export default function SignUpRoute() {

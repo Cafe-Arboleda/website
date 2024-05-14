@@ -4,7 +4,7 @@ import type { LoaderFunction, LoaderFunctionArgs } from "@remix-run/node";
 
 import { ROUTE } from "./enum";
 
-import { getSupabaseWithSessionHeaders } from "~/lib/supabase/supabase-server.server";
+import { createSupabaseServerClient } from "~/lib/supabase/client.server";
 
 const PUBLIC_ROUTES = [ROUTE.SIGN_IN, ROUTE.SIGN_UP];
 const PRIVATE_ROUTES = [ROUTE.ACCOUNT, ROUTE.MEMBERSHIP];
@@ -18,7 +18,7 @@ export const atuhLoader = async ({ callback, loaderArgs }: AuthLoaderOptions) =>
   const { request } = loaderArgs;
   const { pathname } = new URL(request.url);
 
-  const { supabase } = await getSupabaseWithSessionHeaders({
+  const { supabase, headers } = createSupabaseServerClient({
     request,
   });
 
@@ -27,16 +27,16 @@ export const atuhLoader = async ({ callback, loaderArgs }: AuthLoaderOptions) =>
   const isAuthenticated = data.session?.access_token;
 
   if (isAuthenticated && PUBLIC_ROUTES.includes(pathname)) {
-    throw redirect(ROUTE.HOME);
+    throw redirect(ROUTE.HOME, { headers });
   }
 
   if (!isAuthenticated && PRIVATE_ROUTES.includes(pathname)) {
-    throw redirect(ROUTE.HOME);
+    throw redirect(ROUTE.HOME, { headers });
   }
 
   if (callback) {
     return await callback({ ...loaderArgs });
   }
 
-  return json({ ok: true });
+  return json({ ok: true }, { headers });
 };
