@@ -1,5 +1,7 @@
-import { Link } from "@remix-run/react";
+import clsx from "clsx";
+
 import { cva } from "class-variance-authority";
+import { NavLink } from "@remix-run/react";
 
 import type { LinkProps } from "@remix-run/react";
 import type { VariantProps } from "class-variance-authority";
@@ -12,6 +14,8 @@ const navlinkStyles = cva(styles.navlink, {
       default: styles.navlink,
 
       special: styles.specialNavlink,
+
+      tab: styles.tab,
     },
   },
 
@@ -24,10 +28,17 @@ interface NavlinkProps extends LinkProps, VariantProps<typeof navlinkStyles> {
   children: React.ReactNode;
 }
 
-export const Navlink = ({ children, variant, ...linkProps }: NavlinkProps) => {
+export const Navlink = ({ children, variant, to, ...linkProps }: NavlinkProps) => {
   return (
-    <Link className={navlinkStyles({ variant })} {...linkProps}>
+    <NavLink
+      end
+      to={to}
+      className={({ isActive }) =>
+        clsx(navlinkStyles({ variant }), isActive && styles.isActive)
+      }
+      {...linkProps}
+    >
       {children}
-    </Link>
+    </NavLink>
   );
 };

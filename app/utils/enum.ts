@@ -11,5 +11,6 @@ export const ROUTE = {
   RECOVER_PASSWORD: "/recover-password",
 
   ACCOUNT: "/account",
-  MEMBERSHIP: "/account/membership",
+  PROFILE: "/profile",
+  MEMBERSHIP: "/membership",
 };
