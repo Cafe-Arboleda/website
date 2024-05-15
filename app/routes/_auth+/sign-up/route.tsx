@@ -14,6 +14,7 @@ import { CheckboxInput } from "~/components/checkbox-input";
 import { SignFormWrapper } from "~/components/sign-form-wrapper";
 
 import styles from "./route.module.css";
+import { mapErrors } from "~/utils/format-form-error";
 
 export const loader: LoaderFunction = (loaderArgs) => atuhLoader({ loaderArgs });
 
@@ -35,19 +36,49 @@ export const action: ActionFunction = async ({ request }) => {
   const checkResult = userSchema.safeParse(formData);
 
   if (!checkResult.success) {
-    return json({ user: null, errors: checkResult.error.format() }, { headers });
+    console.log(mapErrors({ zodError: checkResult.error }));
+
+    return json({ errors: checkResult.error.format() }, { headers });
   }
 
-  const { error } = await supabase.auth.signUp({
+  const {
+    data: { user },
+    error: signUpError,
+  } = await supabase.auth.signUp({
     email: checkResult.data.email,
     password: checkResult.data.password,
   });
 
-  if (error) {
+  if (signUpError) {
+    if (signUpError.code === "user_already_exists") {
+      return json(
+        {
+          errors: { email: { _errors: ["This email is already registered"] } },
+        },
+        { headers }
+      );
+    }
+
     return json(
-      { success: false, user: null, errors: { server: error.message } },
+      {
+        errors: { server: { _errors: [signUpError.message] } },
+      },
       { headers }
     );
+  }
+
+  const { error: profileCreationError } = await supabase.from("profiles").insert({
+    user_id: user?.id || "",
+    first_name: checkResult.data.firstName,
+    last_name: checkResult.data.lastName,
+  });
+
+  if (profileCreationError) {
+    console.error(profileCreationError);
+
+    return json({
+      errors: { server: { _errors: [profileCreationError.message] } },
+    });
   }
 
   return redirect(ROUTE.HOME, { headers });
@@ -65,32 +96,15 @@ export default function SignUpRoute() {
     >
       <Form action="/sign-up" method="post" className={styles.form}>
         <div className={styles.userInfoFields}>
-          <TextInput
-            label="Primer Nombre"
-            name="firstName"
-            error={errors?.firstName._errors[0]}
-          />
+          <TextInput label="Primer Nombre" name="firstName" error={errors} />
 
-          <TextInput
-            label="Primer Apellido"
-            name="lastName"
-            error={errors?.lastName._errors[0]}
-          />
+          <TextInput label="Primer Apellido" name="lastName" error={errors} />
         </div>
 
         <div className={styles.userCredentialsFields}>
-          <TextInput
-            label="Email"
-            name="email"
-            type="email"
-            error={errors?.email._errors[0]}
-          />
-          <TextInput
-            label="Password"
-            name="password"
-            type="password"
-            error={errors?.password._errors[0]}
-          />
+          <TextInput label="Email" name="email" type="email" error={errors} />
+
+          <TextInput label="Password" name="password" type="password" error={errors} />
 
           <CheckboxInput name="policyAgreement">
             Certifico que tengo al menos 21 años de edad y que he leído y aceptado los{" "}

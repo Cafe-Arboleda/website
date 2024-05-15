@@ -1,5 +1,7 @@
 import { createServerClient, parse, serialize } from "@supabase/ssr";
 
+import type { Database } from "database.types";
+
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!;
 
@@ -11,7 +13,7 @@ export const createSupabaseServerClient = ({ request }: { request: Request }) =>
 
   const headers = new Headers();
 
-  const supabase = createServerClient(
+  const supabase = createServerClient<Database>(
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_ANON_KEY!,
     {

@@ -4,17 +4,19 @@ import styles from "./text-input.module.css";
 
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  error?: string;
+  error?: { [x: string]: { _errors: string[] } };
 }
 
-export const TextInput = ({ label, error, ...inputProps }: TextInputProps) => {
+export const TextInput = ({ label, name, error, ...inputProps }: TextInputProps) => {
   return (
     <label className={styles.container}>
       <span className={styles.label}>{label}</span>
 
-      <input {...inputProps} className={styles.input} />
+      <input name={name} className={styles.input} {...inputProps} />
 
-      <span className={styles.error_message}>{error}</span>
+      {error && (
+        <span className={styles.error_message}>{error[name as string]._errors[0]}</span>
+      )}
     </label>
   );
 };

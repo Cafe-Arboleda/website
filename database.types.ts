@@ -78,7 +78,7 @@ export type Database = {
       }
       profiles: {
         Row: {
-          birthdate: string
+          birthdate: string | null
           created_at: string
           first_name: string
           id: string
@@ -86,7 +86,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          birthdate: string
+          birthdate?: string | null
           created_at?: string
           first_name: string
           id?: string
@@ -94,7 +94,7 @@ export type Database = {
           user_id: string
         }
         Update: {
-          birthdate?: string
+          birthdate?: string | null
           created_at?: string
           first_name?: string
           id?: string
