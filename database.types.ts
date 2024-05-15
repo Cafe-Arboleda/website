@@ -9,76 +9,8 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      identifications: {
-        Row: {
-          created_at: string
-          id: number
-          id_number: string
-          type: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          id_number: string
-          type: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          id_number?: string
-          type?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "identifications_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      memberships: {
-        Row: {
-          code: string
-          created_at: string
-          id: string
-          is_active: boolean
-          type: string
-          user_id: string
-        }
-        Insert: {
-          code: string
-          created_at?: string
-          id?: string
-          is_active: boolean
-          type: string
-          user_id: string
-        }
-        Update: {
-          code?: string
-          created_at?: string
-          id?: string
-          is_active?: boolean
-          type?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "memberships_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       profiles: {
         Row: {
-          birthdate: string | null
           created_at: string
           first_name: string
           id: string
@@ -86,7 +18,6 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          birthdate?: string | null
           created_at?: string
           first_name: string
           id?: string
@@ -94,7 +25,6 @@ export type Database = {
           user_id: string
         }
         Update: {
-          birthdate?: string | null
           created_at?: string
           first_name?: string
           id?: string
@@ -102,6 +32,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "profiles_user_id_fkey"
             columns: ["user_id"]
@@ -119,7 +56,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      membership_type: "seed" | "founder"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
